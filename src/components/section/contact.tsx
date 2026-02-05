@@ -18,7 +18,7 @@ export default function ContactSection() {
         headers: {
           "Content-Type": "application/json",
         },
-      }
+      },
     );
 
     if (res.ok) {
@@ -73,7 +73,7 @@ export default function ContactSection() {
         >
           <a
             href="https://www.facebook.com/mi.lana.521512"
-            className="flex items-center text-blue-600 text-4xl hover:scale-105 hover:-translate-y-1 transition-transform duratiom-300"
+            className="flex items-center text-blue-600 text-4xl hover:scale-105 hover:-translate-y-1 transition-transform duration-300"
           >
             <i className="fab fa-facebook"></i>
             <span className="text-2xl px-3">Facebook</span>
@@ -81,7 +81,7 @@ export default function ContactSection() {
 
           <a
             href="https://www.instagram.com/meeln8/"
-            className="flex items-center text-red-400 text-4xl hover:scale-105 hover:-translate-y-1 transition-transform duratiom-300"
+            className="flex items-center text-red-400 text-4xl hover:scale-105 hover:-translate-y-1 transition-transform duration-300"
           >
             <i className="fab fa-instagram"></i>
             <span className="text-2xl px-3">Instagram</span>
@@ -96,7 +96,7 @@ export default function ContactSection() {
         >
           <a
             href="#"
-            className="flex items-center text-blue-500 text-4xl hover:scale-105 hover:-translate-y-1 transition-transform duratiom-300"
+            className="flex items-center text-blue-500 text-4xl hover:scale-105 hover:-translate-y-1 transition-transform duration-300"
           >
             <i className="fab fa-linkedin"></i>
             <span className="text-2xl px-3">LinkedIn</span>
@@ -104,7 +104,7 @@ export default function ContactSection() {
 
           <a
             href="https://x.com/MeeLn84"
-            className="flex items-center text-sky-400 text-4xl hover:scale-105 hover:-translate-y-1 transition-transform duratiom-300"
+            className="flex items-center text-sky-400 text-4xl hover:scale-105 hover:-translate-y-1 transition-transform duration-300"
           >
             <i className="fab fa-twitter"></i>
             <span className="text-2xl px-3">Twitter</span>

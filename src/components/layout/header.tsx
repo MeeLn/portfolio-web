@@ -7,18 +7,18 @@ export default function Header() {
 
   return (
     <header className=" bg-background text-secondary">
-      <nav className="fixed top-0 left-0 w-full z-50 bg-background shadow-md">
-        <div className="flex h-18 justify-between md:px-32 px-10 items-center border-chart-4 border-b">
+      <nav className="fixed top-0 left-0 w-full z-50 bg-background border-chart-4 border-b shadow-md">
+        <div className="container mx-auto flex h-18 justify-between lg:px-30 px-6 items-center">
           <a href="#hero">
             <img
-              src="/MilanLOGO_light.png"
+              src="/logos/MilanLOGO_light.png"
               className="block dark:hidden"
               alt="Milan Raut"
               height={30}
               width={30}
             />
             <img
-              src="/MilanLOGO_dark_1.png"
+              src="/logos/MilanLOGO_dark_1.png"
               className="hidden dark:block"
               alt="Milan Raut"
               height={30}

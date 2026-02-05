@@ -15,7 +15,7 @@ export default function HeroSection() {
             whileHover={{ x: 30, y: -30, scale: 1.1 }}
           >
             <img
-              src="/profile_1.png"
+              src="/Profile/profile_1.png"
               alt="Milan Raut profile image"
               className="rounded-lg w-full max-w-sm sm:max-w-md lg:max-w-lg"
             />
@@ -30,21 +30,27 @@ export default function HeroSection() {
           >
             <motion.h1
               className="text-4xl sm:text-5xl lg:text-6xl font-bold my-4 text-primary"
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
             >
-              HI, I'M MILAN
+              HI, I'M MILAN RAUT
             </motion.h1>
 
-            <motion.p
-              className="mb-6 text-base sm:text-lg lg:text-xl font-mono border-l-2 border-primary pl-4 mx-auto lg:mx-0 text-justify"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
+            <motion.div
+              className="mb-6 text-base sm:text-lg lg:text-xl font-mono border-l-4 border-primary pl-4 mx-auto lg:mx-0 text-justify space-y-2"
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
             >
-              Discover my projects, skills, and experience in web development.
-            </motion.p>
+              <p className="font-bold text-secondary/80">
+                🎓 BE in Information Technology
+              </p>
+              <p className="text-left">
+                💻 Passionate about software development, problem-solving &
+                exploring new tech.
+              </p>
+            </motion.div>
 
             {/* Buttons */}
             <motion.div

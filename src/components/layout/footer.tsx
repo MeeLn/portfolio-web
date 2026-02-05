@@ -20,94 +20,64 @@ export default function Footer() {
           whileInView="show"
           transition={{ duration: 0.7, ease: "easeOut" }}
         >
-          <div className="border-2 border-border bg-card lg:mx-24 mx-6 mb-10 hover:bg-muted transition">
-            <div className="flex flex-col p-6 space-y-6">
-              {/* Top Section */}
-              <motion.div
-                className="flex flex-col md:flex-row md:justify-between items-center space-y-6 md:space-y-0"
-                variants={fadeUp}
-                transition={{ delay: 0.1 }}
-              >
-                {/* Profile */}
-                <div className="flex flex-col md:order-1 order-2 sm:flex-row sm:space-x-6 items-center text-left">
-                  <div className="border h-40 w-40 hidden md:block mt-6 lg:rounded-full rounded-md shadow-sm shadow-gray-500">
-                    <img
-                      src="/profile_2.png"
-                      alt="Profile"
-                      className="h-full w-full object-cover lg:rounded-full rounded-md"
-                    />
-                  </div>
-
-                  <div className="flex flex-col-reverse md:flex-col mt-4 sm:mt-0 font-mono">
-                    <p className="text-lg lg:text-2xl font-bold mb-2">
-                      About Me
-                    </p>
-                    <p className="mb-1 text-md lg:text-xl">Milan Raut</p>
-                    <p className="mb-1 text-md lg:text-xl">Web Developer</p>
-                    <p className="mb-1 text-md lg:text-xl">
-                      Phone:{" "}
-                      <a
-                        href="tel:9866734873"
-                        className="hover:text-green-400 font-bold"
-                      >
-                        9866734873
-                      </a>
-                    </p>
-                    <p className="text-md lg:text-xl">
-                      Email:{" "}
-                      <a
-                        href="mailto:contact@milanraut.com.np"
-                        className="hover:text-green-400 font-bold"
-                      >
-                        contact@milanraut.com.np
-                      </a>
-                    </p>
-                  </div>
+          <div className="border border-border bg-card/50 backdrop-blur-sm lg:mx-30 mx-6 mb-10 overflow-hidden hover:border-primary/50 transition-all duration-300 shadow-xl">
+            <div className="flex flex-col lg:flex-row p-8 lg:p-12 items-center lg:items-start text-center lg:text-left gap-10">
+              {/* Profile Image */}
+              <div className="relative group">
+                <div className="absolute -inset-1 bg-gradient-to-r from-primary to-green-400 rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+                <div className="relative w-32 h-32 lg:w-40 lg:h-40 rounded-full overflow-hidden border-2 border-primary/20">
+                  <img
+                    src="/profile/profile_2.png"
+                    alt="Milan Raut"
+                    className="w-full h-full object-cover transform hover:scale-110 transition duration-500"
+                  />
                 </div>
+              </div>
 
-                {/* Skills */}
-                <div className="order-1 md:order-2 w-full md:w-1/3 font-mono">
-                  <h2 className="text-md lg:text-xl font-bold text-center">
-                    Skills:
+              {/* Bio & Contact Info */}
+              <div className="flex-1 flex flex-col justify-center space-y-6">
+                <div>
+                  <h2 className="text-3xl lg:text-4xl font-bold text-secondary mb-2 tracking-tight">
+                    Milan Raut
                   </h2>
-                  <p className="mb-1 text-md lg:text-xl text-justify">
-                    C, C++, JAVA, Python, PHP, HTML, CSS, Tailwind CSS,
-                    React.js, Next.js, Django, XML, MySQL, PostgreSQL, SQLite,
-                    Android Studio, VS Code, Visual Studio, IntelliJ IDEA,
-                    Jupyter Notebook
+                  <p className="text-primary font-mono text-lg font-semibold uppercase tracking-widest">
+                    Web Developer
                   </p>
                 </div>
-              </motion.div>
 
-              {/* Text Links */}
-              <motion.div
-                className="flex flex-wrap justify-center gap-6 md:border-none md:pt-none pt-6 border-green-600 border-t text-sm md:text-lg"
-                variants={fadeUp}
-                transition={{ delay: 0.2 }}
-              >
-                {[
-                  ["Facebook", "https://www.facebook.com/mi.lana.521512"],
-                  ["Instagram", "https://www.instagram.com/meeln8/"],
-                  ["Twitter", "https://x.com/MeeLn84"],
-                  ["LinkedIn", "#"],
-                  ["GitHub", "https://github.com/MeeLn"],
-                ].map(([label, link]) => (
+                <p className="text-secondary/70 text-lg leading-relaxed max-w-2xl">
+                  Building digital experiences with precision and passion. Let's
+                  collaborate to bring your ideas to life.
+                </p>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-border/50">
                   <a
-                    key={label}
-                    href={link}
-                    className="text-green-400 hover:underline"
+                    href="tel:9866734873"
+                    className="flex items-center justify-center lg:justify-start gap-3 group text-secondary/80 hover:text-primary transition-colors"
                   >
-                    {label}
+                    <div className="p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-all">
+                      <i className="fas fa-phone"></i>
+                    </div>
+                    <span className="font-mono">+977 9866734873</span>
                   </a>
-                ))}
-              </motion.div>
+                  <a
+                    href="mailto:contact@milanraut.com.np"
+                    className="flex items-center justify-center lg:justify-start gap-3 group text-secondary/80 hover:text-primary transition-colors"
+                  >
+                    <div className="p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-all">
+                      <i className="fas fa-envelope"></i>
+                    </div>
+                    <span className="font-mono">contact@milanraut.com.np</span>
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </motion.div>
 
         {/* Bottom Bar */}
         <motion.div
-          className="flex md:flex-row flex-col justify-between bg-background md:px-30 px-10 py-4 lg:pt-4 border-t border-gray-800"
+          className="container mx-auto flex md:flex-row flex-col justify-between bg-background lg:px-30 px-6 py-4 lg:pt-4 border-t border-gray-800"
           variants={fadeUp}
           initial="hidden"
           whileInView="show"

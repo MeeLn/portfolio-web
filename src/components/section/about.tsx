@@ -14,7 +14,7 @@ export default function AboutSection() {
             whileHover={{ x: -30, y: 40, scale: 1.2 }}
           >
             <img
-              src="/profile.png"
+              src="/profile/profile.png"
               alt="About Milan Raut"
               className="rounded-lg w-full max-w-sm sm:max-w-md lg:max-w-lg"
             />
@@ -33,23 +33,55 @@ export default function AboutSection() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              IT GRADUATE & WEB DEVELOPER
+              ABOUT ME
             </motion.h1>
 
-            <motion.p
-              className="mb-6 text-base sm:text-lg lg:text-xl font-mono border-l-2 border-primary pl-4 mx-auto lg:mx-0 text-justify"
+            <motion.div
+              className="mb-6 text-base sm:text-lg lg:text-xl font-mono border-l-4 border-primary pl-4 mx-auto lg:mx-0 text-justify space-y-4"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
             >
-              An Information Technology graduate with a Bachelor of Engineering
-              in Information Technology (BEIT) from Nepal College of Information
-              Technology (NCIT). Skilled in full-stack development, game design,
-              and mobile application development with hands-on experience in
-              academic projects.
-              <br />
-              Discover my projects, skills, and experience in my CV.
-            </motion.p>
+              <p>
+                An Information Technology graduate with a Bachelor of
+                Engineering in Information Technology (BEIT) from Nepal College
+                of Information Technology (NCIT). I am deeply passionate about
+                software development, problem-solving, and staying ahead of the
+                curve with emerging technologies.
+              </p>
+
+              <div className="flex flex-wrap gap-2 pt-4">
+                {[
+                  "C",
+                  "C++",
+                  "JAVA",
+                  "Python",
+                  "PHP",
+                  "HTML",
+                  "CSS",
+                  "Tailwind CSS",
+                  "React.js",
+                  "Next.js",
+                  "Django",
+                  "XML",
+                  "MySQL",
+                  "PostgreSQL",
+                  "SQLite",
+                  "Android Studio",
+                  "VS Code",
+                  "Visual Studio",
+                  "IntelliJ IDEA",
+                  "Jupyter Notebook",
+                ].map((tech) => (
+                  <span
+                    key={tech}
+                    className="px-3 py-1 bg-primary/10 text-primary border border-primary/20 rounded-full text-xs font-medium hover:bg-primary hover:text-white transition-colors duration-300"
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </motion.div>
 
             {/* Button */}
             <motion.div

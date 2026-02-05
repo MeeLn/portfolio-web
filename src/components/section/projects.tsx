@@ -51,20 +51,20 @@ export default function ProjectsSection() {
             {
               title: "DASHLEAPSTER – 2D Game",
               tech: "Using C++ and SDL2 Library",
-              img1: "/project_1.png",
-              img2: "/project_1-2.png",
+              img1: "/projects/project_1.png",
+              img2: "/projects/project_1-2.png",
             },
             {
               title: "ATTENDANDEASE – Mobile App",
               tech: "Using Android Studio and JAVA",
               img1: "https://images.rawpixel.com/image_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxLzI3OS1wYWkxNTc5LW5hbS1qb2IxNTI5LnBuZw.png",
-              img2: "/image.png",
+              img2: "/projects/image.png",
             },
             {
               title: "COLLEGE LMS",
               tech: "Using Next.js, Django & PostgreSQL",
-              img1: "/project_2.png",
-              img2: "/project_2-2.png",
+              img1: "/projects/project_2.png",
+              img2: "/projects/project_2-2.png",
             },
           ].map((project, index) => (
             <motion.div

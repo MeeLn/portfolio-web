@@ -85,7 +85,7 @@ export default function PortfolioSection() {
                 key={index}
                 variants={cardVariants}
                 transition={{ duration: 0.6, ease: "easeOut" }}
-                className="bg-background hover:scale-105 lg:hover:bg-muted lg:border-2 text-secondary lg:p-4 shadow-lg border-t-2 border-b-2 border-primary hover:border hover:border-primary transition text-center"
+                className="bg-background hover:scale-105 lg:hover:bg-muted lg:border-2 text-secondary py-4 lg:py-2 lg:p-4 shadow-lg border-t-2 border-b-2 border-primary hover:border hover:border-primary transition text-center"
               >
                 <h3 className="font-bold text-secondary text-lg">
                   {item.year}
