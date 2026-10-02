@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
+import WorldShell from "@/components/world-shell";
 import "./globals.css";
 
 const inter = localFont({
@@ -53,7 +54,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} ${jetbrains.variable}`}>
-        {children}
+        <WorldShell>{children}</WorldShell>
       </body>
     </html>
   );

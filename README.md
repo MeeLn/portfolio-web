@@ -1,6 +1,6 @@
 # Milan Raut — Anime-Inspired Developer Portfolio
 
-A production-ready, responsive personal portfolio presented as a cinematic anime-inspired developer universe. The experience combines an editorial software-developer portfolio with a restrained game HUD, blue and violet supernatural effects, original character artwork, a lightweight Three.js scene, project “missions,” and keyboard-accessible navigation.
+A production-ready, responsive personal portfolio presented as a cinematic anime-inspired developer universe. A persistent React Three Fiber world sits behind the readable portfolio content, provides 3D gateway interactions and distinct destination realms, and remains mounted across the home and project routes.
 
 This guide is the complete project brief and maintenance manual. It documents the current implementation, real content, appearance, interactions, architecture, external data sources, limitations, and how to run and extend the application.
 
@@ -8,9 +8,9 @@ This guide is the complete project brief and maintenance manual. It documents th
 
 - **Owner:** Milan Raut, software developer; BE in Information Technology.
 - **Primary profile:** [github.com/MeeLn](https://github.com/MeeLn)
-- **Application:** Next.js App Router, React, strict TypeScript, Tailwind CSS 4, and Framer Motion.
+- **Application:** Next.js App Router, React, strict TypeScript, Tailwind CSS 4, Framer Motion, and Zustand.
 - **Rendering:** Static/prerendered pages by default. Interactive areas are isolated in client components.
-- **3D:** Three.js scene loaded only when its section approaches the viewport.
+- **3D:** One persistent React Three Fiber Canvas, procedural world environments, centralized GSAP camera transitions, and a Zustand world state store.
 - **Backend or API key:** None. GitHub analytics use public, browser-fetched data and have fallback states.
 - **Real project content:** ALTKit, ZeroGrid, AttendEase (personal), and AttendEase Legacy (college).
 - **Company projects:** Supported by the data model, but hidden until real project data is supplied.
@@ -37,14 +37,14 @@ Inter is used for readable editorial text and JetBrains Mono for the system labe
 
 The home page tells the story in this order:
 
-1. **Cinematic intro:** A short “INITIALIZING DEVELOPER SYSTEM” title card. It can be skipped immediately. It is shown once per browser session; under reduced motion it dismisses quickly.
-2. **Hero / developer profile:** The supplied anime hunter illustration (`public/images/characters/hero-hunter.webp`) is the dominant character identity. It is layered with a true Three.js environment, spatial wireframe structures, particles, rings, camera parallax, a dark dungeon wash, and the “DEVELOPER SYSTEM” HUD. Copy introduces Milan and links to Projects, About, GitHub, and the CV from the About section.
+1. **Cinematic intro:** The persistent world initializes behind the “INITIALIZING DEVELOPER WORLD” title and “THE DIGITAL AWAKENING” prompt. Visitors can enter immediately; the intro is shown once per browser session and dismisses quickly for reduced-motion preferences.
+2. **Spawn hub / hero:** The supplied anime hunter illustration (`public/images/characters/hero-hunter.webp`) leads the character presentation. A persistent 3D hub behind the page contains five raycastable gateway structures, floating energy geometry, a dimensional floor, lights, and particles. The HUD exposes equivalent keyboard- and touch-accessible gateway controls.
 3. **Character profile / About:** The supplied anime sorcerer portrait (`public/images/characters/about-portrait.webp`), personal introduction, BE in Information Technology, development interests, problem-solving approach, and learning-by-building approach. Original real-life portraits are retained under `public/profile/` as source assets but are not used as the hero or About artwork.
 4. **Developer abilities / skill tree:** Selectable technology nodes grouped into frameworks, languages, databases, and tools. Selecting a node updates the inspector with its name, category, and short factual description. No skill percentages, seniority ranks, or years are claimed.
 5. **Mission Archive:** Searchable and filterable project entries. The available category filters are generated from populated data, so Company is not shown while there are no company projects. Cards show real icons, category, description, and technologies; each opens its own project route.
 6. **System Analytics:** A developer-console panel showing the public repository count, contribution activity for the last year, and the primary language distribution of up to 100 recently updated public repositories.
 7. **Journey:** An editable, date-free progression from learning fundamentals through building projects and continuing to explore. No milestones or dates have been invented.
-8. **Domain Expansion / Digital Realm:** A Three.js scene with intersecting wireframe energy rings, a geometric core, and a bounded particle field. Project portals link directly to project detail pages. The hero also has a separate true 3D scene with perspective wireframe architecture, orbiting energy rings, light, and particles; pointer movement subtly shifts its camera and scroll progress nudges its depth.
+8. **Domain Expansion / Digital Realm:** Existing anime environment artwork introduces the special ability section. The persistent world switches into its constellation realm and project objects open project detail routes; there is no second canvas.
 9. **Shadow Archive:** Violet and blue artwork plus selectable project-memory nodes. A node reveals the mission name and technology hints; selecting it opens that mission.
 10. **Final Chapter / Contact:** Functional email, GitHub, Instagram, Facebook, Reddit, and X links, followed by “THE STORY IS STILL BEING WRITTEN.” and Milan’s copyright.
 
@@ -74,13 +74,14 @@ These are intentionally broad narrative stages, not dated employment or achievem
 
 ### Interaction guide
 
-- **Intro:** Click the panel or choose “ENTER THE ARCHIVE” to skip.
-- **Navigation:** Sticky section links; the mobile menu can be opened and closed from the header.
+- **Intro:** Click the panel or choose “ENTER THE WORLD” to skip.
+- **Navigation:** The floating 3D gateway dock is the primary navigation. Select a gateway by pointer or tap, or use Tab then Enter/Space; arrow keys move focus through the dock. The HUD tracks the active realm while the visitor scrolls and the same Canvas remains mounted on project detail routes.
 - **Command palette:** Press `Ctrl+K` on Windows/Linux or `Cmd+K` on macOS. It includes section navigation, curated project routes, GitHub, contact, and theme switching. `Escape` closes it; keyboard focus is trapped while it is open.
 - **Theme:** Use the sun/moon control. Choice is saved in `localStorage` under `milan-theme`.
 - **Project archive:** Filter by populated category or project type; search title, description, category, type, and technologies. “Reset archive” clears all filters when no results match.
 - **Project galleries:** If a project has real screenshots, select a thumbnail to open the native dialog viewer. Previous/next controls and left/right arrow keys change images; Escape closes the dialog. Empty screenshot arrays render no fake gallery.
-- **Hero and domain 3D:** The hero and domain scenes are separate, dynamically imported Three.js canvases. Both cap pixel ratio, observe visibility, pause rendering offscreen, respect reduced motion, and dispose WebGL resources. The anime artwork and CSS layers remain visible if WebGL cannot initialize.
+- **World navigation:** Use the persistent Gateway dock or select a visible 3D portal. Portals animate the central camera, change the active realm, and navigate to the matching section or project route. The dock is keyboard and touch accessible and remains present on project details.
+- **World quality and motion:** The Gateway dock cycles automatic, performance, and cinematic particle settings. Its motion control respects the operating-system reduced-motion preference and can be adjusted manually.
 - **Developer console:** Press `Alt+Shift+D`. It is a local informational dialog, not a shell or remote command runner; Escape closes it, focus stays inside, and focus returns to the trigger.
 - **Achievement easter egg:** Enter the Konami sequence (↑ ↑ ↓ ↓ ← → ← → B A) to show a brief accessible achievement notification and temporary violet/blue visual pulse.
 - **Gallery, buttons, links, filters, and dialogs:** Use semantic controls with keyboard operation and visible focus treatment. Motion is reduced when the visitor requests reduced motion.
@@ -194,16 +195,17 @@ src/
 │   ├── sitemap.ts                 Sitemap generated from project slugs
 │   └── projects/[slug]/page.tsx   Static project detail route
 ├── components/
-│   ├── portfolio.tsx              Home sections, theme, navigation, intro, filters
+│   ├── world-shell.tsx            Persistent app shell, world HUD, route/scroll navigation
+│   ├── world-scene.tsx            Persistent R3F Canvas, scene registry, raycast portals
+│   ├── portfolio.tsx              Home content, theme, intro, filters, command palette
 │   ├── github-analytics.tsx       Public GitHub data and analytics display
 │   ├── project-gallery.tsx        Accessible screenshot viewer
-│   ├── lazy-hero-scene.tsx        Near-viewport loading for hero WebGL scene
-│   ├── hero-canvas.tsx            Three.js hero environment and camera motion
-│   ├── lazy-domain-scene.tsx      Near-viewport loading for domain scene
-│   ├── domain-canvas.tsx          Three.js renderer and resource lifecycle
 │   └── easter-eggs.tsx            Secret console and achievement interaction
 └── data/
-    └── projects.ts                Typed source of project content
+    ├── projects.ts                Typed source of project content
+    └── world.ts                   Typed realms, portal placements, camera destinations
+
+src/lib/world-store.ts             Shared Zustand world and transition state
 
 public/
 ├── profile/                       Original profile photos, retained but not used as hero/About art
@@ -219,10 +221,12 @@ public/
 
 ## Architecture and implementation notes
 
-- `src/app/page.tsx` is a Server Component that renders the interactive portfolio client component. Project detail routes are Server Components and statically generated using `generateStaticParams` from the project data.
-- `src/components/portfolio.tsx` owns home-page interactions: theme persistence, active-section tracking, mobile navigation, the short intro, command palette, filtering/search, and section motion. The rest of the document is not made interactive solely to support Three.js.
-- `src/components/lazy-domain-scene.tsx` waits until the 3D section nears the viewport before dynamically importing `domain-canvas.tsx` with server rendering disabled. The WebGL renderer uses low-power preferences, capped device pixel ratio, intersection visibility pausing, reduced-motion support, and explicit GPU resource disposal.
-- Framer Motion provides view reveals, short transitions, and dialog/command palette animation. CSS handles ambient effects, loops, layout, and reduced-motion fallbacks. Three.js is reserved for the meaningful 3D domain scene; the rest of the site remains regular semantic HTML and optimized images.
+- `src/app/layout.tsx` wraps every App Router destination in `src/components/world-shell.tsx`. The shell is persistent between client-side routes and owns one dynamically imported React Three Fiber Canvas. Project detail pages therefore retain the same renderer and world shell.
+- `src/components/world-scene.tsx` is the scene registry and 3D interaction layer. It switches among the hub, character, ability, mission, progression, and contact environments while preserving the Canvas. Portal and project meshes use R3F raycast events. Project meshes navigate to the same data-driven detail routes as the DOM archive.
+- `src/data/world.ts` defines typed realms, portal metadata, and camera destinations. `src/lib/world-store.ts` defines shared Zustand world state: realm, phase, camera target, selection, hover, quality, reduced-motion preference, and transition token.
+- `CameraDirector` centralizes position, target, and field-of-view transitions with GSAP. It cancels superseded tweens and uses transition tokens to ignore stale completion events. Scroll-position observation synchronizes the active realm, and HUD gateways navigate to sections or project routes.
+- `src/components/world-shell.tsx` provides the persistent location HUD, primary gateway navigation, quality/motion controls, and a React error boundary. The canvas is transparent, low-power, and loaded client-side. Device pixel ratio adjusts for viewport size and the performance setting. Accessible DOM content remains usable if WebGL is unavailable.
+- `src/components/portfolio.tsx` owns editorial content and non-world UI such as theme persistence, intro, command palette, archive filters, analytics, and galleries. Framer Motion handles short DOM transitions; Three.js animation stays in R3F frame updates.
 - Images use `next/image` where appropriate, with explicit `sizes`; Next image output is configured to prefer AVIF/WebP. Anime artwork leads the hero, About section, and social preview. Original transparent profile PNGs remain in `public/profile/` but are not rendered as the main or About character image.
 - `src/app/layout.tsx` contains the global title/description, Open Graph and X/Twitter card metadata, anime preview image, custom favicon, local fonts, and viewport configuration. Project routes set their own title, description, social metadata, and canonical path when the site origin is configured.
 - `src/app/robots.ts` and `src/app/sitemap.ts` provide metadata routes. Set `NEXT_PUBLIC_SITE_URL` to the canonical deployed origin to enable canonical URL metadata, absolute Open Graph/X social preview metadata, sitemap URLs, and the sitemap reference in robots output. Use the origin only, for example `https://portfolio.example.com`, without a trailing path.

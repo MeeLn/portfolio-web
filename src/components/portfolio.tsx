@@ -2,10 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import LazyDomainScene from "@/components/lazy-domain-scene";
-import LazyHeroScene from "@/components/lazy-hero-scene";
 import GitHubAnalytics from "@/components/github-analytics";
 import EasterEggs from "@/components/easter-eggs";
+import { useWorldStore } from "@/lib/world-store";
 import { useEffect, useMemo, useState } from "react";
 import {
   AnimatePresence,
@@ -22,14 +21,14 @@ import {
   Command,
   Github,
   GraduationCap,
-  Layers3,
-  Menu,
   Search,
   Moon,
   Sun,
   X,
 } from "lucide-react";
 import { projects } from "@/data/projects";
+import { worldPortals } from "@/data/world";
+import { journey } from "@/data/journey";
 
 const skills = [
   { name: "Next.js", group: "Frameworks", note: "App Router · React" },
@@ -64,24 +63,6 @@ const skills = [
   { name: "Jupyter", group: "Tools", note: "Notebook environment" },
   { name: "C++ Builder", group: "Tools", note: "IDE" },
 ];
-const journey = [
-  ["01", "The beginning", "Curiosity turns into a first line of code."],
-  [
-    "02",
-    "Learning the fundamentals",
-    "Building understanding across programming, software, and systems.",
-  ],
-  [
-    "03",
-    "Building projects",
-    "Turning ideas into applications through personal and college projects.",
-  ],
-  [
-    "04",
-    "Exploring what’s next",
-    "Continuing to learn, experiment, and make more useful things.",
-  ],
-];
 const projectFilters = [
   { key: "all", label: "ALL MISSIONS" },
   ...(["Personal", "College", "Company"] as const)
@@ -110,15 +91,24 @@ const socials = [
 
 export default function Portfolio() {
   const [active, setActive] = useState("all");
-  const [activeSection, setActiveSection] = useState("");
   const [activeType, setActiveType] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [selected, setSelected] = useState(skills[0]);
   const [light, setLight] = useState(false);
-  const [menu, setMenu] = useState(false);
   const [command, setCommand] = useState(false);
   const [intro, setIntro] = useState(true);
   const reduceMotion = useReducedMotion();
+  const worldSelection = useWorldStore((state) => state.selected);
+  useEffect(() => {
+    const ability = skills.find((skill) => skill.name === worldSelection);
+    if (ability) setSelected(ability);
+  }, [worldSelection]);
+  const activateSkill = (skill: (typeof skills)[number]) => {
+    setSelected(skill);
+    useWorldStore
+      .getState()
+      .beginTransition("skills", worldPortals[1].destination, skill.name);
+  };
   const filtered = useMemo(
     () =>
       projects.filter((project) => {
@@ -150,7 +140,10 @@ export default function Portfolio() {
     const done = sessionStorage.getItem("milan-intro");
     const initialFrame = window.requestAnimationFrame(() => {
       setLight(stored === "light");
-      if (done) setIntro(false);
+      if (done) {
+        setIntro(false);
+        useWorldStore.getState().enterWorld();
+      }
     });
     const handler = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
@@ -159,7 +152,6 @@ export default function Portfolio() {
       }
       if (e.key === "Escape") {
         setCommand(false);
-        setMenu(false);
       }
     };
     window.addEventListener("keydown", handler);
@@ -201,20 +193,6 @@ export default function Portfolio() {
   }, [command]);
 
   useEffect(() => {
-    const sections = document.querySelectorAll("main section[id]");
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (visible) setActiveSection(visible.target.id);
-      },
-      { rootMargin: "-22% 0px -66% 0px" },
-    );
-    sections.forEach((section) => observer.observe(section));
-    return () => observer.disconnect();
-  }, []);
-  useEffect(() => {
     document.documentElement.dataset.theme = light ? "light" : "dark";
     localStorage.setItem("milan-theme", light ? "light" : "dark");
   }, [light]);
@@ -224,12 +202,13 @@ export default function Portfolio() {
       () => {
         setIntro(false);
         sessionStorage.setItem("milan-intro", "1");
+        useWorldStore.getState().enterWorld();
       },
       reduceMotion ? 300 : 1300,
     );
     return () => window.clearTimeout(timer);
   }, [intro, reduceMotion]);
-  const nav = [
+  const nav: [string, string][] = [
     ["About", "about"],
     ["Abilities", "skills"],
     ["Missions", "projects"],
@@ -239,6 +218,7 @@ export default function Portfolio() {
   const dismissIntro = () => {
     setIntro(false);
     sessionStorage.setItem("milan-intro", "1");
+    useWorldStore.getState().enterWorld();
   };
 
   return (
@@ -259,12 +239,16 @@ export default function Portfolio() {
               <div className="intro-mark">
                 MR<span> / SYSTEM 01</span>
               </div>
-              <p>INITIALIZING DEVELOPER SYSTEM</p>
+              <p>INITIALIZING DEVELOPER WORLD</p>
+              <h1>MILAN RAUT</h1>
+              <span className="intro-subtitle">
+                SOFTWARE DEVELOPER · THE DIGITAL AWAKENING
+              </span>
               <div className="intro-line">
                 <i />
               </div>
               <button onClick={dismissIntro}>
-                ENTER THE ARCHIVE <ArrowRight size={13} />
+                ENTER THE WORLD <ArrowRight size={13} />
               </button>
             </motion.div>
           )}
@@ -281,22 +265,6 @@ export default function Portfolio() {
               MILAN RAUT<small>DEVELOPER / PORTFOLIO</small>
             </span>
           </Link>
-          <nav
-            className={menu ? "nav-links open" : "nav-links"}
-            aria-label="Primary navigation"
-          >
-            {nav.map(([label, id]) => (
-              <a
-                key={id}
-                href={`#${id}`}
-                className={activeSection === id ? "active" : ""}
-                aria-current={activeSection === id ? "location" : undefined}
-                onClick={() => setMenu(false)}
-              >
-                {label}
-              </a>
-            ))}
-          </nav>
           <div className="top-actions">
             <button
               className="icon-button theme-toggle"
@@ -312,13 +280,6 @@ export default function Portfolio() {
             >
               <Command size={14} />
               <span>⌘ K</span>
-            </button>
-            <button
-              className="icon-button menu-toggle"
-              onClick={() => setMenu((v) => !v)}
-              aria-label={menu ? "Close menu" : "Open menu"}
-            >
-              {menu ? <X size={18} /> : <Menu size={18} />}
             </button>
           </div>
         </header>
@@ -372,7 +333,6 @@ export default function Portfolio() {
             </div>
           </motion.div>
           <div className="hero-stage">
-            <LazyHeroScene />
             <div className="hero-stage-wash" aria-hidden="true" />
             <div className="stage-grid" aria-hidden="true" />
             <div className="stage-orbit orbit-a" aria-hidden="true" />
@@ -506,7 +466,7 @@ export default function Portfolio() {
                         className={
                           selected.name === s.name ? "skill-node selected" : ""
                         }
-                        onClick={() => setSelected(s)}
+                        onClick={() => activateSkill(s)}
                       >
                         {s.name}
                       </button>
@@ -524,7 +484,7 @@ export default function Portfolio() {
                         className={
                           selected.name === s.name ? "skill-node selected" : ""
                         }
-                        onClick={() => setSelected(s)}
+                        onClick={() => activateSkill(s)}
                       >
                         {s.name}
                       </button>
@@ -544,7 +504,7 @@ export default function Portfolio() {
                         className={
                           selected.name === s.name ? "skill-node selected" : ""
                         }
-                        onClick={() => setSelected(s)}
+                        onClick={() => activateSkill(s)}
                       >
                         {s.name}
                       </button>
@@ -788,23 +748,24 @@ export default function Portfolio() {
             />
           </div>
           <div className="timeline">
-            {journey.map(([n, title, body], i) => (
+            {journey.map(({ id, title, description }, i) => (
               <motion.div
                 className="timeline-item"
-                key={n}
+                data-selected={worldSelection === id}
+                key={id}
                 initial={{ opacity: 0, x: -14 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, amount: 0.5 }}
                 transition={{ duration: 0.4, delay: i * 0.08 }}
               >
                 <div className="timeline-marker">
-                  <span>{n}</span>
+                  <span>{id}</span>
                   <i />
                 </div>
                 <div className="timeline-copy">
-                  <span className="eyebrow">CHAPTER {n}</span>
+                  <span className="eyebrow">CHAPTER {id}</span>
                   <h3>{title}</h3>
-                  <p>{body}</p>
+                  <p>{description}</p>
                 </div>
                 <span className="timeline-state">
                   {i === 3 ? "NOW UNFOLDING" : "FOUNDATION"}
@@ -822,7 +783,6 @@ export default function Portfolio() {
               sizes="(max-width: 760px) 100vw, 55vw"
             />
           </div>
-          <LazyDomainScene />
           <div className="domain-rings" aria-hidden="true">
             <i />
             <i />
@@ -963,14 +923,6 @@ export default function Portfolio() {
           <span>THE STORY IS STILL BEING WRITTEN.</span>
           <a href="#home">BACK TO THE TOP ↑</a>
         </footer>
-        <button
-          className="floating-index"
-          onClick={() => setCommand(true)}
-          aria-label="Open navigation commands"
-        >
-          <Layers3 size={15} />
-          <span>INDEX</span>
-        </button>
         <AnimatePresence>
           {command && (
             <motion.div
