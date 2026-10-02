@@ -237,13 +237,13 @@ pnpm install
 pnpm dev
 ```
 
-Open `http://localhost:3000`. To enable absolute SEO URLs during local or deployed builds, set:
+Open `http://localhost:3000`. The repository includes `.env.example`, and this checkout has a local `.env.local` configured with `NEXT_PUBLIC_SITE_URL=http://localhost:3000`. To set up another checkout, copy `.env.example` to `.env.local`. For production, replace the value in your hosting provider's environment variables with your real canonical site origin (for example, `https://your-domain.com`):
 
 ```bash
-NEXT_PUBLIC_SITE_URL=https://your-deployed-domain.example
+NEXT_PUBLIC_SITE_URL=https://your-real-domain.com
 ```
 
-The environment variable is optional for local development. Set it in the deployment provider’s build/runtime environment for canonical metadata and a populated sitemap.
+`.env.local` is ignored by Git and should not be committed. Set the production value in the deployment provider's build environment for canonical metadata, absolute Open Graph/X URLs, and a populated sitemap. Restart the development server after changing the local value.
 
 ## Validation and production
 
