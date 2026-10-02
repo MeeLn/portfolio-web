@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import LazyDomainScene from "@/components/lazy-domain-scene";
+import LazyHeroScene from "@/components/lazy-hero-scene";
 import GitHubAnalytics from "@/components/github-analytics";
 import EasterEggs from "@/components/easter-eggs";
 import { useEffect, useMemo, useState } from "react";
@@ -117,7 +118,6 @@ export default function Portfolio() {
   const [menu, setMenu] = useState(false);
   const [command, setCommand] = useState(false);
   const [intro, setIntro] = useState(true);
-  const [animeReveal, setAnimeReveal] = useState(false);
   const reduceMotion = useReducedMotion();
   const filtered = useMemo(
     () =>
@@ -325,34 +325,36 @@ export default function Portfolio() {
         <div className="reading-progress" aria-hidden="true" />
         <EasterEggs />
         <section className="hero section-wrap" id="home">
-          <div className="hero-copy">
-            <div className="eyebrow status">
-              <span className="status-dot" /> AVAILABLE FOR THE NEXT CHAPTER{" "}
-              <span className="status-line" />
+          <motion.div
+            className="hero-copy"
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, delay: 0.08 }}
+          >
+            <div className="hero-kicker">
+              <span className="status-dot" /> DEVELOPER PROFILE / 001
+              <span className="hero-kicker-rule" />
             </div>
             <h1>
               MILAN
               <br />
               <span>RAUT</span>
-              <sup>®</sup>
             </h1>
-            <p className="hero-role">
-              SOFTWARE DEVELOPER <b>·</b> BE INFORMATION TECHNOLOGY
-            </p>
+            <p className="hero-role">SOFTWARE DEVELOPER</p>
             <p className="hero-description">
-              Building digital worlds,
-              <br className="desktop-break" /> one line at a time.
+              Building Digital Worlds,
+              <br className="desktop-break" /> One Line at a Time.
             </p>
             <p className="hero-sub">
               An IT engineering student passionate about software development,
-              solving problems, and turning ideas into useful applications.
+              problem-solving, and creating meaningful digital experiences.
             </p>
             <div className="hero-actions">
               <a className="button-primary" href="#projects">
-                Explore missions <ArrowRight size={15} />
+                Explore Projects <ArrowRight size={15} />
               </a>
               <a className="button-quiet" href="#about">
-                About me <ArrowRight size={14} />
+                About Me <ArrowRight size={14} />
               </a>
               <a
                 className="button-quiet"
@@ -360,87 +362,60 @@ export default function Portfolio() {
                 target="_blank"
                 rel="noreferrer"
               >
-                GitHub profile <ArrowUpRight size={14} />
-              </a>
-              <a
-                className="button-quiet"
-                href="/cv/CV.pdf"
-                download="Milan-Raut-CV.pdf"
-              >
-                Download CV <ArrowDown size={14} />
+                GitHub <ArrowUpRight size={14} />
               </a>
             </div>
             <div className="hero-index">
-              <span>01 / 05</span>
+              <span>01 / 06</span>
               <i />
               <span>THE DEVELOPER UNIVERSE</span>
             </div>
-          </div>
+          </motion.div>
           <div className="hero-stage">
-            <div className="stage-grid" />
-            <div className="stage-orbit orbit-a" />
-            <div className="stage-orbit orbit-b" />
-            <div className="stage-coordinates">
-              DIGITAL REALM
-              <br />
-              PROFILE 001
-            </div>
-            <div className="stage-label">
-              FIG. 001 <span>DEVELOPER PROFILE</span>
-            </div>
-            <div className="portrait-shadow" />
+            <LazyHeroScene />
+            <div className="hero-stage-wash" aria-hidden="true" />
+            <div className="stage-grid" aria-hidden="true" />
+            <div className="stage-orbit orbit-a" aria-hidden="true" />
+            <div className="stage-orbit orbit-b" aria-hidden="true" />
+            <div className="hero-art-backlight" aria-hidden="true" />
             <Image
-              src="/profile/profile_1.png"
-              alt="Portrait of Milan Raut"
+              src="/images/characters/hero-hunter.webp"
+              alt="Milan Raut as an anime hunter in a blue-lit dungeon, wearing his black cap and glasses"
               fill
               priority
-              sizes="(max-width: 760px) 88vw, 52vw"
+              sizes="(max-width: 900px) 100vw, 60vw"
               className="hero-portrait"
             />
-            <AnimatePresence>
-              {animeReveal && (
-                <motion.div
-                  className="hero-anime-reveal"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                >
-                  <Image
-                    src="/images/characters/hero-hunter.webp"
-                    alt="Illustrated hunter form inspired by Milan Raut"
-                    fill
-                    sizes="(max-width: 760px) 88vw, 52vw"
-                  />
-                </motion.div>
-              )}
-            </AnimatePresence>
-            <button
-              className="anime-reveal-toggle"
-              onClick={() => setAnimeReveal((value) => !value)}
-              aria-pressed={animeReveal}
-            >
-              {animeReveal ? "RETURN TO PHOTO" : "REVEAL ILLUSTRATED FORM"}
-            </button>
+            <div className="hero-art-vignette" aria-hidden="true" />
+            <div className="stage-coordinates">
+              AWAKENED DEVELOPER
+              <br />
+              DIGITAL REALM / MR-01
+            </div>
+            <div className="stage-label">
+              CHARACTER FILE <span>SOLO LEVELING / INSPIRED</span>
+            </div>
             <div className="stage-hud">
               <span className="hud-top">
-                <i /> DEVELOPER / PROFILE
-              </span>
-              <b>MILAN RAUT</b>
-              <span>
-                CLASS <strong>FULL-STACK DEVELOPER</strong>
+                <i /> DEVELOPER SYSTEM
               </span>
               <span>
-                RANK <strong>CONTINUOUSLY EVOLVING</strong>
+                IDENTITY <strong>MILAN RAUT</strong>
               </span>
               <span>
-                STATUS{" "}
-                <strong className="cyan">BUILDING THE NEXT EXPERIENCE</strong>
+                CLASS <strong>SOFTWARE DEVELOPER</strong>
+              </span>
+              <span>
+                STATUS <strong className="cyan">BUILDING</strong>
               </span>
               <span className="hud-meter">
                 <i />
               </span>
             </div>
-            <div className="stage-number">001</div>
+            <div className="stage-number" aria-hidden="true">
+              001
+            </div>
+            <span className="hero-art-caption">FIG. 001 — AWAKENED HUNTER</span>
           </div>
           <a className="scroll-cue" href="#about">
             <span>SCROLL TO EXPLORE</span>
@@ -455,8 +430,8 @@ export default function Portfolio() {
           <div className="about-layout">
             <div className="about-photo">
               <Image
-                src="/profile/profile_2.png"
-                alt="Milan Raut, software developer"
+                src="/images/characters/about-portrait.webp"
+                alt="Milan Raut in a blue-lit anime sorcerer portrait wearing his cap and glasses"
                 fill
                 sizes="(max-width: 760px) 90vw, 36vw"
               />
@@ -720,8 +695,10 @@ export default function Portfolio() {
                   </Link>
                   <div className="mission-info">
                     <div className="mission-overline">
-                      <span>{p.category.toUpperCase()} PROJECT</span>
                       <span>{p.category.toUpperCase()}</span>
+                      <span>
+                        {p.projectType?.toUpperCase() ?? "SOFTWARE PROJECT"}
+                      </span>
                     </div>
                     <Link
                       href={`/projects/${p.slug}`}

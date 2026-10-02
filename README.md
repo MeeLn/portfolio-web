@@ -38,13 +38,13 @@ Inter is used for readable editorial text and JetBrains Mono for the system labe
 The home page tells the story in this order:
 
 1. **Cinematic intro:** A short “INITIALIZING DEVELOPER SYSTEM” title card. It can be skipped immediately. It is shown once per browser session; under reduced motion it dismisses quickly.
-2. **Hero / developer profile:** Milan’s real transparent portrait (`public/profile/profile_1.png`) sits in a dimensional technical stage with orbit lines, grid, a blue aura, and a developer status HUD. Copy introduces Milan and links to the mission archive, About section, GitHub, and actual CV download. `REVEAL ILLUSTRATED FORM` temporarily presents the supplied anime hunter artwork over the real portrait; the photograph is the default.
-3. **Character profile / About:** A second real portrait (`public/profile/profile_2.png`), personal introduction, BE in Information Technology, development interests, problem-solving approach, and learning-by-building approach.
+2. **Hero / developer profile:** The supplied anime hunter illustration (`public/images/characters/hero-hunter.webp`) is the dominant character identity. It is layered with a true Three.js environment, spatial wireframe structures, particles, rings, camera parallax, a dark dungeon wash, and the “DEVELOPER SYSTEM” HUD. Copy introduces Milan and links to Projects, About, GitHub, and the CV from the About section.
+3. **Character profile / About:** The supplied anime sorcerer portrait (`public/images/characters/about-portrait.webp`), personal introduction, BE in Information Technology, development interests, problem-solving approach, and learning-by-building approach. Original real-life portraits are retained under `public/profile/` as source assets but are not used as the hero or About artwork.
 4. **Developer abilities / skill tree:** Selectable technology nodes grouped into frameworks, languages, databases, and tools. Selecting a node updates the inspector with its name, category, and short factual description. No skill percentages, seniority ranks, or years are claimed.
 5. **Mission Archive:** Searchable and filterable project entries. The available category filters are generated from populated data, so Company is not shown while there are no company projects. Cards show real icons, category, description, and technologies; each opens its own project route.
 6. **System Analytics:** A developer-console panel showing the public repository count, contribution activity for the last year, and the primary language distribution of up to 100 recently updated public repositories.
 7. **Journey:** An editable, date-free progression from learning fundamentals through building projects and continuing to explore. No milestones or dates have been invented.
-8. **Domain Expansion / Digital Realm:** A Three.js scene with intersecting wireframe energy rings, a geometric core, and a bounded particle field. Project portals link directly to project detail pages.
+8. **Domain Expansion / Digital Realm:** A Three.js scene with intersecting wireframe energy rings, a geometric core, and a bounded particle field. Project portals link directly to project detail pages. The hero also has a separate true 3D scene with perspective wireframe architecture, orbiting energy rings, light, and particles; pointer movement subtly shifts its camera and scroll progress nudges its depth.
 9. **Shadow Archive:** Violet and blue artwork plus selectable project-memory nodes. A node reveals the mission name and technology hints; selecting it opens that mission.
 10. **Final Chapter / Contact:** Functional email, GitHub, Instagram, Facebook, Reddit, and X links, followed by “THE STORY IS STILL BEING WRITTEN.” and Milan’s copyright.
 
@@ -80,7 +80,7 @@ These are intentionally broad narrative stages, not dated employment or achievem
 - **Theme:** Use the sun/moon control. Choice is saved in `localStorage` under `milan-theme`.
 - **Project archive:** Filter by populated category or project type; search title, description, category, type, and technologies. “Reset archive” clears all filters when no results match.
 - **Project galleries:** If a project has real screenshots, select a thumbnail to open the native dialog viewer. Previous/next controls and left/right arrow keys change images; Escape closes the dialog. Empty screenshot arrays render no fake gallery.
-- **Domain scene:** It is initialized near the viewport, tracks pointer position, pauses offscreen, caps pixel ratio, and disposes Three.js resources when unmounted. A CSS/artwork treatment remains as fallback if WebGL cannot initialize.
+- **Hero and domain 3D:** The hero and domain scenes are separate, dynamically imported Three.js canvases. Both cap pixel ratio, observe visibility, pause rendering offscreen, respect reduced motion, and dispose WebGL resources. The anime artwork and CSS layers remain visible if WebGL cannot initialize.
 - **Developer console:** Press `Alt+Shift+D`. It is a local informational dialog, not a shell or remote command runner; Escape closes it, focus stays inside, and focus returns to the trigger.
 - **Achievement easter egg:** Enter the Konami sequence (↑ ↑ ↓ ↓ ← → ← → B A) to show a brief accessible achievement notification and temporary violet/blue visual pulse.
 - **Gallery, buttons, links, filters, and dialogs:** Use semantic controls with keyboard operation and visible focus treatment. Motion is reduced when the visitor requests reduced motion.
@@ -197,22 +197,24 @@ src/
 │   ├── portfolio.tsx              Home sections, theme, navigation, intro, filters
 │   ├── github-analytics.tsx       Public GitHub data and analytics display
 │   ├── project-gallery.tsx        Accessible screenshot viewer
-│   ├── lazy-domain-scene.tsx      Near-viewport loading for 3D scene
+│   ├── lazy-hero-scene.tsx        Near-viewport loading for hero WebGL scene
+│   ├── hero-canvas.tsx            Three.js hero environment and camera motion
+│   ├── lazy-domain-scene.tsx      Near-viewport loading for domain scene
 │   ├── domain-canvas.tsx          Three.js renderer and resource lifecycle
 │   └── easter-eggs.tsx            Secret console and achievement interaction
 └── data/
     └── projects.ts                Typed source of project content
 
 public/
-├── profile/                       Original transparent photos used in hero/About
+├── profile/                       Original profile photos, retained but not used as hero/About art
 ├── images/characters/             Optimized anime chapter illustrations (WebP)
 ├── generated image/               Supplied source artwork; preserved originals
 ├── projects/icons/                Project app icons used by mission cards/details
 ├── projects/                      Unlabelled legacy images; unrelated images excluded
 ├── downloads/                     Real distributable files, including Legacy APK
 ├── cv/CV.pdf                      Resume/CV download
-├── og/portfolio.webp              1200×630 social preview image
-└── profileicon.png                Site favicon
+├── og/portfolio.webp              1200×630 anime social preview image
+└── favicon.svg                     Custom MR monogram favicon
 ```
 
 ## Architecture and implementation notes
@@ -221,9 +223,9 @@ public/
 - `src/components/portfolio.tsx` owns home-page interactions: theme persistence, active-section tracking, mobile navigation, the short intro, command palette, filtering/search, and section motion. The rest of the document is not made interactive solely to support Three.js.
 - `src/components/lazy-domain-scene.tsx` waits until the 3D section nears the viewport before dynamically importing `domain-canvas.tsx` with server rendering disabled. The WebGL renderer uses low-power preferences, capped device pixel ratio, intersection visibility pausing, reduced-motion support, and explicit GPU resource disposal.
 - Framer Motion provides view reveals, short transitions, and dialog/command palette animation. CSS handles ambient effects, loops, layout, and reduced-motion fallbacks. Three.js is reserved for the meaningful 3D domain scene; the rest of the site remains regular semantic HTML and optimized images.
-- Images use `next/image` where appropriate, with explicit `sizes`; Next image output is configured to prefer AVIF/WebP. The original transparent profile PNGs are retained so their real proportions and appearance can be used without face alteration.
-- `src/app/layout.tsx` contains the global title/description, Open Graph and X/Twitter card metadata, favicon, local fonts, and viewport configuration.
-- `src/app/robots.ts` and `src/app/sitemap.ts` provide metadata routes. Set `NEXT_PUBLIC_SITE_URL` to the canonical deployed origin to enable canonical URL metadata, absolute social preview metadata, sitemap URLs, and the sitemap reference in robots output. Use the origin only, for example `https://portfolio.example.com`, without a trailing path.
+- Images use `next/image` where appropriate, with explicit `sizes`; Next image output is configured to prefer AVIF/WebP. Anime artwork leads the hero, About section, and social preview. Original transparent profile PNGs remain in `public/profile/` but are not rendered as the main or About character image.
+- `src/app/layout.tsx` contains the global title/description, Open Graph and X/Twitter card metadata, anime preview image, custom favicon, local fonts, and viewport configuration. Project routes set their own title, description, social metadata, and canonical path when the site origin is configured.
+- `src/app/robots.ts` and `src/app/sitemap.ts` provide metadata routes. Set `NEXT_PUBLIC_SITE_URL` to the canonical deployed origin to enable canonical URL metadata, absolute Open Graph/X social preview metadata, sitemap URLs, and the sitemap reference in robots output. Use the origin only, for example `https://portfolio.example.com`, without a trailing path.
 - No database, server actions, API routes, authentication, or secret environment variables are part of the app.
 
 ## Development
@@ -268,4 +270,4 @@ Deploy as a standard Next.js application (for example, a Next.js-compatible host
 
 ## Current content gaps to remember
 
-The site and its project schema are ready for verified content updates, but they should not be mistaken for content that has already been supplied. Specifically, the three personal repository links, personal app screenshots, demo videos, live demos, store listings, version/release notes, and dated milestones are not currently present. Add them when verified; until then, the corresponding UI stays absent. The anime scene artwork remains an illustration; the hero and About sections use Milan’s actual photos, and the hero illustration is an optional visual mode.
+The site and its project schema are ready for verified content updates, but they should not be mistaken for content that has already been supplied. Specifically, the three personal repository links, personal app screenshots, demo videos, live demos, store listings, version/release notes, and dated milestones are not currently present. Add them when verified; until then, the corresponding UI stays absent. The hero and About sections use supplied anime illustrations as requested. Original real-life portraits remain unused under `public/profile/`; no AI image generation or face alteration is part of this implementation.

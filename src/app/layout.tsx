@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     description: "Building digital worlds, one line at a time.",
     ...(socialPreview ? { images: socialPreview } : {}),
   },
-  icons: { icon: "/profileicon.png" },
+  icons: { icon: "/favicon.svg", shortcut: "/favicon.svg" },
 };
 export const viewport: Viewport = {
   themeColor: "#090b0f",

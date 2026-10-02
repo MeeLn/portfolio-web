@@ -21,7 +21,26 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const p = projects.find((x) => x.slug === slug);
-  return { title: p?.title ?? "Project" };
+  if (!p) return { title: "Project not found" };
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "");
+  const socialPreview = siteUrl ? ["/og/portfolio.webp"] : undefined;
+  return {
+    title: p.title,
+    description: p.description,
+    ...(siteUrl ? { alternates: { canonical: `/projects/${p.slug}` } } : {}),
+    openGraph: {
+      title: `${p.title} — Milan Raut`,
+      description: p.description,
+      type: "article",
+      ...(socialPreview ? { images: socialPreview } : {}),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${p.title} — Milan Raut`,
+      description: p.description,
+      ...(socialPreview ? { images: socialPreview } : {}),
+    },
+  };
 }
 export default async function ProjectPage({
   params,
